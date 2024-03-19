@@ -14,3 +14,5 @@
 *.json
 
 build/
+
+*.out
