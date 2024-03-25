@@ -189,3 +189,75 @@ qemu-system-arm -M vexpress-a9 -m 128M -nographic \
 -sd sd.img
 ```
 
+## U-boot and TFTP
+
+- Trivial File Transfer Protocol
+-  Somewhat similar to FTP, but without authentication and over UDP
+
+``` bash
+sudo apt install tftpd-hpa
+```
+
+> All files in /srv/tftp is exposed by default to TFTP
+
+- You can edit this default location in the config file of the tftp which is in **/etc/default/tftpd-hpa**
+
+- You will need also to change the ownership of the **/srv/tftp** directory to **tftp:tftp** to make this service user able to access it
+
+- Also change TFTP_OPTIONS="--secure --create"
+
+### Uboot environment for TFTP
+
+1. First when running in QEMU we will need to create a virtual interface *tap* to be able to use the physicalinterface of the machine.
+
+``` bash
+# This command will run the next script to make virtual interface to be used in QEMU
+
+sudo qemu-system-arm -M vexpress-a9 -m 128M -nographic \
+-kernel ~/u-boot/u-boot \
+-sd sd.img \
+-net tap,script=./qemu-ifup -net nic'   
+```
+
+
+``` bash
+# This script will make a tap and assign it IP
+#!/bin/sh
+ip a add 192.168.0.1/24 dev $1
+ip link set $1 up
+
+```
+
+2. Uboot variables
+
+``` bash
+# Assign IP for the QEMU (UBOOT) and assign the server (tap)
+setenv ipaddr 192.168.0.5; setenv serverip 192.168.0.1
+
+# Load using TFTP
+tftp 0x60100000 zImage; tftp 0x60000000 vexpress-v2p-ca9.dtb
+```
+
+3. Boot the KERNEL
+
+```bash
+bootz $kernel_addr_r - $fdt_addr_r
+```
+
+
+## Useful variables 
+
+``` bash
+LoadTFTP=echo Loading From TFTP; setenv ipaddr 192.168.0.5; setenv serverip 192.168.0.1; run FATLOAD_TFTP
+
+FATLOAD_TFTP=tftp $kernel_addr_r zImage; tftp $fdt_addr_r vexpress-v2p-ca9.dtb
+
+
+LoadSD=if mmc dev; then run FATLOAD_SD; else echo SD Not Found; fi
+
+FATLOAD_SD=fatload mmc 0:1 $kernel_addr_r zimage; fatload mmc 0:1 $fdt_addr_r vexpress-v2p-ca9.dtb
+
+
+KERNEL_RUN=bootz $kernel_addr_r - $fdt_addr_r
+
+```
