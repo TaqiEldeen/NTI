@@ -149,6 +149,12 @@ The default value of the bootscript variable is **platformname**-bootscript.
 5. When the bootscript has been fully executed (or cancelled) U-Boot continues normal
 execution.
 
+
+``` bash
+# mkimage is in tools directory
+mkimage -T script -n "Bootscript" -C none -d <input_file> <output_file>
+```
+
 # QEMU
 
 To use QEMU with Uboot you will need to make and mount virtual SD-Card
@@ -207,6 +213,31 @@ sudo apt install tftpd-hpa
 - Also change TFTP_OPTIONS="--secure --create"
 
 ### Uboot environment for TFTP
+
+#### Prerequisit
+``` bash
+#Switch to root
+sudo su
+#Make sure you are connected to internet
+ping google.com
+#Download tftp protocol
+sudo apt-get install tftpd-hpa
+#Check the tftp ip address
+ip addr `will be needed`
+#Change the configuration of tftp
+nano /etc/default/tftpd-hpa
+	#write inside the file
+    tftf_option = “--secure –-create”
+#Restart the protocal
+Systemctl restart tftpd-hpa
+#Make sure the tftp protocol is running
+Systemctl status tftpd-hpa
+#Change the file owner
+cd /srv
+chown tftp:tftp tftp 
+#Move your image or file to the server
+cp [File name] /srv/tftp
+```
 
 1. First when running in QEMU we will need to create a virtual interface *tap* to be able to use the physicalinterface of the machine.
 
