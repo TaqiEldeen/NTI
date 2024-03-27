@@ -7,6 +7,27 @@ The Linux kernel is the core component of the Linux operating system, responsibl
 
 ![alt text](LinuxKernel.png)
 
+## Linux main directories
+
+-  `arch:` Contains architecture-specific files. There is one subdirectory per architecture.
+-  `Documentation:` Contains kernel documentation. Always look here first if you
+want to find more information about an aspect of Linux.
+-  `drivers:` Contains device drivers – thousands of them. There is a subdirectory for
+each type of driver.
+- `fs:` Contains filesystem code.
+- `include:` Contains kernel header files, including those required when building
+the toolchain.
+- `init:` Contains the kernel startup code.
+- `kernel:` Contains core functions, including scheduling, locking, timers, power
+management, and debug/trace code.
+- `mm:` Contains memory management.
+- `net:` Contains network protocols.
+- `scripts:` Contains many useful scripts, including the device tree compiler (DTC)
+which I described in Chapter 3, All About Bootloaders.
+- `tools:` Contains many useful tools, including the Linux performance counters
+tool, perf.
+
+## Working with the kernel source
 
 ``` bash
 # Clone the Linux Kernel
