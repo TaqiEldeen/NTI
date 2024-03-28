@@ -1,0 +1,15 @@
+#!/bin/bash
+case "$1" in
+start)
+        echo "Starting simpelserver"
+        start-stop-daemon -S -n simpleserver -a /usr/bin/helloworld
+;;
+stop)
+        echo "Stopping simpleserver"
+        start-stop-daemon -K -n simpleserver
+;;
+*)
+        echo "Usage: $0 {start|stop}"
+        exit 1
+esac
+exit 0

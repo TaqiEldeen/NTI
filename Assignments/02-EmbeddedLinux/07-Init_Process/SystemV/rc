@@ -1,0 +1,46 @@
+#!/bin/bash
+# Script to run all files in specified rcx.d directory starting with kill scripts then start scripts
+
+# Check if runlevel argument is provided
+if [ -z "$1" ]; then
+    echo "Usage: $0 <runlevel>"
+    exit 1
+fi
+
+RUNLEVEL="$1"
+RC_DIR="/etc/rc$RUNLEVEL.d"
+
+# Function to execute all scripts in a directory
+execute_scripts() {
+    local dir="$1"
+    local pattern="$2"
+
+    # Check if directory exists
+    if [ ! -d "$dir" ]; then
+        echo "Directory $dir does not exist."
+        return 1
+    fi
+
+    # Loop through scripts in directory
+    for script in "$dir"/$pattern*; do
+        if [ -x "$script" ]; then
+            echo "Executing $script"
+            # Check if k or s
+            if [ "$pattern" = "K" ]; then
+                "$script" stop
+            else
+                "$script" start
+            fi
+        fi
+    done
+}
+
+# Execute kill scripts first
+echo "Executing kill scripts in $RC_DIR"
+execute_scripts "$RC_DIR" "K"
+
+# Execute start scripts
+echo "Executing start scripts in $RC_DIR"
+execute_scripts "$RC_DIR" "S"
+
+echo "All scripts executed."
