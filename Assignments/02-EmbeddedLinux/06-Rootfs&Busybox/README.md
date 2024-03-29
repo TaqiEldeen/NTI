@@ -159,3 +159,25 @@ mount -t proc comment /proc
 mount -t sysfs comment /sys
 ```
 
+## NFS
+
+``` bash
+sudo apt install nfs-kernel-server
+# You will need to add export to /etc/exports
+/home/taqi/rootfs *(rw,sync,no_subtree_check,no_root_squash)
+```
+
+- The `*` means any ip can access this dircetory
+
+```bash
+# Apply changes to the service
+sudo exportfs -ar
+```
+
+Now you can append a kernel command line to state the NFS rootfs 
+
+```
+setenv bootargs console=ttyXXX root=/dev/nfs ip=192.168.0.100:::::eth0 nfsroot=192.168.0.1:/home/taqi/rootfs,nfsvers=3,tcp rw init=/sbin/init
+```
+- ip : will state the QEMU IP
+- nfsroot : states the tap IP address and the directory
