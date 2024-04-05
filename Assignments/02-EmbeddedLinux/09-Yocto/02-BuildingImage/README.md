@@ -62,3 +62,88 @@ runqemu qemuarm
 ```
 
 ## Raspberry Pi 4
+
+### 1- Download the RPI4 layer
+> https://git.yoctoproject.org/meta-raspberrypi
+
+
+### 2- Check the dependencies of this layer
+
+
+```bash
+# README.md
+.
+.
+.
+
+This layer depends on:
+
+URI: git://git.yoctoproject.org/poky
+
+branch: master
+revision: HEAD
+URI: git://git.openembedded.org/meta-openembedded
+
+layers: meta-oe, meta-multimedia, meta-networking, meta-python
+branch: master
+revision: HEAD
+.
+.
+.
+```
+
+**Therefore you will need to download meta-openembedded and poky ofcourse**
+
+### 3- Add the dependent layers to the bblayers.conf
+```
+BBLAYERS ?= " \
+  /home/taqi/poky/meta \
+  /home/taqi/poky/meta-poky \
+  /home/taqi/poky/meta-yocto-bsp \
+  /home/taqi/meta-raspberrypi \
+  /home/taqi/meta-openembedded/meta-oe \
+  /home/taqi/meta-openembedded/meta-python \
+  /home/taqi/meta-openembedded/meta-networking\
+  /home/taqi/meta-openembedded/meta-multimedia \
+  "
+```
+
+### 4- Add the machine name raspberrypi4-64 to local.conf
+```
+.
+.
+MACHINE ?= "raspberrypi4-64"
+.
+.
+```
+You may ask how did we know the name of the machine?
+
+- Go to meta-raspberrypi/conf/machine
+
+You will see the supported machines by this layer.
+
+### 5- Add extra packages you want in local.conf if needed
+
+```bash
+CORE_IMAGE_EXTRA_INSTALL += "openssh python3-termcolor"
+```
+> This will install openssh and color your terminal
+
+**NOTE:** 
+- openssh is part of the `meta-openembedded/meta-oe`
+- python3-termcolor is part of `meta-openembedded/meta-python`
+
+### 6- Finally build your image
+```
+bitbake core-image-minimal
+```
+> After this the file you want to format on your SD card will be in tmp/deploy/images/<yours>/*.wic.bz2
+
+
+### SSH from laptop to RPI4 with ethernet
+Make sure your ethernet interface has an IP on your laptop and other IP on your RPI4
+
+```bash
+# -b will specify the IP you want to use when SSH
+ssh -b 192.168.1.151 root@192.168.1.150
+```
