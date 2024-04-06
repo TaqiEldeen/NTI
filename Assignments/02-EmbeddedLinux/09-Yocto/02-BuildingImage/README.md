@@ -147,3 +147,9 @@ Make sure your ethernet interface has an IP on your laptop and other IP on your 
 # -b will specify the IP you want to use when SSH
 ssh -b 192.168.1.151 root@192.168.1.150
 ```
+
+## Check any environment variable 
+``` bash
+# Check for any variable starts with MACHINE 
+ bitbake -e core-image-minimal | grep ^MACHINE
+```
