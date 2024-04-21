@@ -1,0 +1,9 @@
+[Unit]
+Description=Log new dmesg and toggle capslock
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/monitor-dmesg.sh
+
+[Install]
+WantedBy=multi-user.target
