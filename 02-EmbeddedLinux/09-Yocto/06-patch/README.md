@@ -35,3 +35,5 @@ we have a demo app in github: https://github.com/FadyKhalil/DemoApp
 4. Add your new recipe that will contain both the .bbappend and .patch files
 
 5. Build your image again 
+
+> NOTE: If you want to prevent the patch file use `BBMASK` in your local.conf
