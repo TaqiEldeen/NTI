@@ -9,7 +9,9 @@ bbappend file is just an extention to an already existed recipe that you want to
     git diff source.c > fix-somthing.patch
     ```
 2. Make a custom recipe directory / or layer if needded 
+
     ![alt text](tree.png)
+
 
 3. Add your patch file in the files directory within the recipe
 
