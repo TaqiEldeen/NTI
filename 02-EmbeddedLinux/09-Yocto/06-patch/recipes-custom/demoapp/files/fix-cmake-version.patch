@@ -1,0 +1,17 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4c16702..71b1c91 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.22)
++cmake_minimum_required(VERSION 3.16)
+ 
+ project(calculator
+         DESCRIPTION "my calculator using thread")
+@@ -20,4 +20,4 @@ add_subdirectory(${CMAKE_HOME_DIRECTORY}/lib)
+ 
+ target_include_directories(${PROJECT_NAME} PUBLIC include)
+ 
+-target_link_libraries(${PROJECT_NAME} PRIVATE class)
+\ No newline at end of file
++target_link_libraries(${PROJECT_NAME} PRIVATE class)
